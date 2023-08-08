@@ -1,8 +1,5 @@
-## sbt project compiled with Scala 3
-
-### Usage
-
-This is a normal sbt project. You can compile code with `sbt compile`, run it with `sbt run`, and `sbt console` will start a Scala 3 REPL.
-
-For more information on the sbt-dotty plugin, see the
-[scala3-example-project](https://github.com/scala/scala3-example-project/blob/main/README.md).
+Receives list of domains from trustpilot.com
+Requests monthlyvisits from vstat.info
+Domains are filtered by categories.
+Script re-runs every 5 minutes.
+To run type **sbt run** from terminal.
