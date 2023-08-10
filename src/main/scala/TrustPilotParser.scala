@@ -1,6 +1,9 @@
 import io.circe.*
 import io.circe.parser.*
-
+/**
+ * Parses JSON data retrieved from TrustPilot
+ * to a list of (DomainName, CategoriesList) pairs
+ */
 object TrustPilotParser {
 
   def extractStores(json: String): Option[List[(String, List[String])]] = {

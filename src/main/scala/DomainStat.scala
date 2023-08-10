@@ -1,7 +1,9 @@
 import sttp.client4.quick.*
 import sttp.client4.Response
 import scala.util.matching.Regex
-
+/** 
+ * Requests web.vstat.info for Monthly Visits counter for a specific domain
+ */
 object DomainStat {
 
   val SESSION_ID = "vstat_session=ErJt7YU24evVK9RUNNqcn95FhC5yai0jHAHmnVwN;"

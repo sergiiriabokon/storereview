@@ -4,7 +4,9 @@ import scala.util.matching.Regex
 import io.circe.*
 import io.circe.parser.*
 import java.util.concurrent.*
-
+/**
+ * Runs a paralel thread with scheduled execution of a function
+ */
 object Scheduler {
   val MAIN_THREAD_MAX_TIME_MIN = 30
 

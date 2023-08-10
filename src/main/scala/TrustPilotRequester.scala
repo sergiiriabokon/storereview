@@ -1,6 +1,9 @@
 import sttp.client4.quick.*
 import sttp.client4.Response
 
+/**
+ * Reqeusts TrustPilot for domains with latest reviews
+ */
 object TrustPilotRequester {
 
   val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store")
