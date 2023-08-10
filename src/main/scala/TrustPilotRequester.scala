@@ -5,7 +5,9 @@ import sttp.client4.Response
  * Reqeusts TrustPilot for domains with latest reviews
  */
 object TrustPilotRequester {
-
+  /**
+   * Printed domains are restricted (filtered out) to these categories
+   */
   val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store")
 
   def processReviews(): Unit = {
