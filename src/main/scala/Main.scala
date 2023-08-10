@@ -92,6 +92,9 @@ object StoreReview {
     
     // To stop the execution after a certain time (e.g., 1 hour)
     executor.schedule(() => future.cancel(true), 15, TimeUnit.MINUTES)
+
+    // regulates the main thread execution, program goes on as long as main thread does
+    Thread.sleep(20 * 60 * 1000) // script runs for 20 minutes for "sbt run"
   }
 
 }
