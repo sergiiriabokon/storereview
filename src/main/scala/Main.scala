@@ -6,8 +6,9 @@ import io.circe.parser._
 import java.util.concurrent._
 
 object StoreReview {
+  val MAIN_THREAD_MAX_TIME_MIN = 30;
 
-  val validCategoryIds: Set[String] = Set("clothing_store", "outerwear_store")
+  val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store")
 
   def requestMontlyVisits(urlName:String): Unit = {
     if (urlName.isEmpty()) 
@@ -67,7 +68,7 @@ object StoreReview {
     extractedData match {
       case Some(dataList) =>
         dataList.filter { case (_, categoryIds) =>
-          categoryIds.exists(validCategoryIds)
+          categoryIds.exists(VALID_CATEGORY_IDS)
         }.foreach { case (identifyingName, categoryIds) =>
           println(s"Identifying Name: $identifyingName")
           println("Category IDs:")
@@ -94,7 +95,7 @@ object StoreReview {
     executor.schedule(() => future.cancel(true), 15, TimeUnit.MINUTES)
 
     // regulates the main thread execution, program goes on as long as main thread does
-    Thread.sleep(20 * 60 * 1000) // script runs for 20 minutes for "sbt run"
+    Thread.sleep(MAIN_THREAD_MAX_TIME_MIN * 60 * 1000) // script runs for 20 minutes for "sbt run"
   }
 
 }
