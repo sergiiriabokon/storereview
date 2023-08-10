@@ -6,7 +6,7 @@ import sttp.client4.Response
  */
 object TrustPilotRequester {
   /**
-   * Printed domains are restricted (filtered out) to these categories
+   * Printed domains are restricted to these categories
    */
   val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store")
 
