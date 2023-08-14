@@ -1,0 +1,1 @@
+case class Store(id: String, url: String, categories: List[String], review: String)
