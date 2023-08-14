@@ -34,7 +34,8 @@ object TrustPilotRequester {
           println("Category IDs: ")
           println(store.categories.mkString(", "))
           println("Monthly visits: " + DomainStat.requestMontlyVisits(store.url))
-          println(s"Review: ${store.review}")
+          println(s"ReviewCount: ${store.reviews.size}")
+          println(s"Review: ${store.reviews.head}")
           println("")
         }
       case None =>
@@ -42,11 +43,11 @@ object TrustPilotRequester {
     }
   }
 
-  def requestReview(storeId: String): Option[String] = {
+  def requestReview(storeId: String): Option[List[String]] = {
     val response: Response[String] = quickRequest
       .get(uri"https://www.trustpilot.com/api/categoriespages/$storeId/reviews?locale=en-US")
       .send()
   
-    TrustPilotParser.extractReview(response.body)
+    TrustPilotParser.extractReviews(response.body)
   }
 }

@@ -1,1 +1,1 @@
-case class Store(id: String, url: String, categories: List[String], review: String)
+case class Store(id: String, url: String, categories: List[String], reviews: List[String])
