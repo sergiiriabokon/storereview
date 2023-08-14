@@ -20,7 +20,8 @@ object TrustPilotParser {
           category.hcursor.downField("categoryId").as[String].toOption
         }
         val review = TrustPilotRequester.requestReview(unitId).getOrElse(List[String]("no reviews found"))
-        if (identifyingName.nonEmpty && categoryIds.nonEmpty) Some(Store(unitId, identifyingName, categoryIds, review))
+        val numberOfReviews = businessUnit.hcursor.downField("numberOfReviews").as[Int].toOption.getOrElse(0)
+        if (identifyingName.nonEmpty && categoryIds.nonEmpty) Some(Store(unitId, identifyingName, categoryIds, review, numberOfReviews))
         else None
       }
 

@@ -34,7 +34,7 @@ object TrustPilotRequester {
           println("Category IDs: ")
           println(store.categories.mkString(", "))
           println("Monthly visits: " + DomainStat.requestMontlyVisits(store.url))
-          println(s"ReviewCount: ${store.reviews.size}")
+          println(s"ReviewCount: ${store.numberOfReviews}")
           println(s"Review: ${store.reviews.head}")
           println("")
         }
