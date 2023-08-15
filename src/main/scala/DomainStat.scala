@@ -25,6 +25,7 @@ object DomainStat {
     val response = request.send()
     
     val responseBody = response.body.getOrElse("")
+    
     val monthlyVisitsRegex: Regex = """.*MONTHLY_VISITS.*data\-smvisits=\"(\d+)\"""".r
     val monthlyVisits = monthlyVisitsRegex.findFirstMatchIn(responseBody).map(_.group(1))
 

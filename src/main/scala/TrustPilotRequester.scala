@@ -9,20 +9,27 @@ object TrustPilotRequester {
   /**
    * Printed domains are restricted to these categories
    */
-  val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store")
+  val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store", "jewelry_store")
+  /**
+   * List of web-pages each corresponding to page_name.json API end-point
+   */
+  val CATEGORY_PAGES: Set[String] = Set("clothing_store", "jewelry_store")
+
   /**
    * holds list of retrieved values
    */
   var stores = Map[String, Store]()
   
   def processReviews(): Unit = {
-    println("Processing clothing stores")
-    for i <- 1 until 20
-      do synchronized {
-         stores = stores ++ processClothingStores(i)
-         print(".")
+    CATEGORY_PAGES.foreach{ categoryName => {
+      println(s"Processing $categoryName")
+      for i <- 1 until 3
+        do synchronized {
+          stores = stores ++ processCategoryEndpoint(i, categoryName)
+          print(".")
+        }
       }
-
+    }
     var storesList = stores.values.toList.sortBy( s => (s.numberOfReviews, s.monthlyVisits) ).reverse
 
     println("\nResults: ")
@@ -37,8 +44,8 @@ object TrustPilotRequester {
       println("no data found")
   }
 
-  def processClothingStores(pageNumber: Int): Map[String, Store] = {
-    val suffixOption = ConfigReader.getProperty("clothing_store.suffix")
+  def processCategoryEndpoint(pageNumber: Int, categoryName: String): Map[String, Store] = {
+    val suffixOption = ConfigReader.getProperty("categories.suffix")
 
     if (suffixOption.isEmpty) {
       println("clothing store suffix not found")
@@ -48,7 +55,9 @@ object TrustPilotRequester {
 
     val pageNumberParam: Option[Int] = if (pageNumber == 1)  None else Some(pageNumber)
     
-    val uriStr = uri"https://www.trustpilot.com/_next/data/$suffix/categories/clothing_store.json?page=${pageNumberParam}&categoryId=clothing_store&sort=latest_review"
+    val uriStr = uri"https://www.trustpilot.com/_next/data/$suffix/categories/${categoryName}.json?page=${pageNumberParam}&categoryId=${categoryName}&sort=latest_review"
+   
+    println(uriStr);
 
     val response: Response[String] = quickRequest
       .get(uriStr)
