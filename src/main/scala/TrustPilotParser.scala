@@ -19,7 +19,7 @@ object TrustPilotParser {
         val categoryIds = categories.flatMap { category =>
           category.hcursor.downField("categoryId").as[String].toOption
         }
-        val review = TrustPilotRequester.requestReview(unitId).getOrElse(List[String]("no reviews found"))
+        val review = TrustPilotRequester.requestReview(unitId).getOrElse(List[Review](Review("no reviews found", "empty date")))
         val numberOfReviews = businessUnit.hcursor.downField("numberOfReviews").as[Int].toOption.getOrElse(0)
         val monthlyVisits = DomainStat.requestMontlyVisits(identifyingName)
         
@@ -32,13 +32,16 @@ object TrustPilotParser {
     }
   }
 
-  def extractReviews(json: String): Option[List[String]] = {
+  def extractReviews(json: String): Option[List[Review]] = {
     val parseResult = parse(json)
 
     parseResult.toOption.flatMap { jsonValue =>
       val reviewsArray = jsonValue.hcursor.downField("reviews").focus.flatMap(_.asArray)
-      val reviewTexts = reviewsArray.map(_.flatMap(_.hcursor.downField("text").as[String].toOption))
-
+      val reviewTexts = reviewsArray.map(_.flatMap{ r =>
+        Some(Review(r.hcursor.downField("text").as[String].toOption.getOrElse("noreview text"),
+               r.hcursor.downField("date").downField("createdAt").as[String].toOption.getOrElse("noreview date")))
+      })
+      
       reviewTexts.map(_.toList)
     }
   }

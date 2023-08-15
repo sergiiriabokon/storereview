@@ -1,0 +1,1 @@
+case class Review(text: String, timestamp: String)

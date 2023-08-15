@@ -36,7 +36,8 @@ object TrustPilotRequester {
     println(storesList.take(5)
     .map { store =>
       s"${store.url} ${store.numberOfReviews} ${store.monthlyVisits} " + 
-      store.reviews.head.substring(0, Math.min(store.reviews.head.length(), 50))
+      store.reviews.head.text.substring(0, Math.min(store.reviews.head.text.length(), 50))
+      + " " + store.reviews.head.timestamp
     }.mkString(", "))
 
     // storesList.foreach(s => print(s.url + " "))
@@ -74,7 +75,7 @@ object TrustPilotRequester {
     }
   }
 
-  def requestReview(storeId: String): Option[List[String]] = {
+  def requestReview(storeId: String): Option[List[Review]] = {
     val response: Response[String] = quickRequest
       .get(uri"https://www.trustpilot.com/api/categoriespages/$storeId/reviews?locale=en-US")
       .send()
