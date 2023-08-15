@@ -9,11 +9,11 @@ object TrustPilotRequester {
   /**
    * Printed domains are restricted to these categories
    */
-  val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store", "jewelry_store")
+  val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store", "jewelry_store", "electronics_technology")
   /**
    * List of web-pages each corresponding to page_name.json API end-point
    */
-  val CATEGORY_PAGES: Set[String] = Set("clothing_store", "jewelry_store")
+  val CATEGORY_PAGES: Set[String] = Set("clothing_store", "jewelry_store", "electronics_technology")
 
   /**
    * holds list of retrieved values
@@ -22,7 +22,7 @@ object TrustPilotRequester {
   
   def processReviews(): Unit = {
     CATEGORY_PAGES.foreach{ categoryName => {
-      println(s"Processing $categoryName")
+      println(s"\nProcessing $categoryName")
       for i <- 1 until 3
         do synchronized {
           stores = stores ++ processCategoryEndpoint(i, categoryName)
@@ -35,7 +35,8 @@ object TrustPilotRequester {
     println("\nResults: ")
     println(storesList.take(5)
     .map { store =>
-      s"${store.url} ${store.numberOfReviews} ${store.monthlyVisits}"
+      s"${store.url} ${store.numberOfReviews} ${store.monthlyVisits} " + 
+      store.reviews.head.substring(0, Math.min(store.reviews.head.length(), 50))
     }.mkString(", "))
 
     // storesList.foreach(s => print(s.url + " "))
@@ -56,8 +57,6 @@ object TrustPilotRequester {
     val pageNumberParam: Option[Int] = if (pageNumber == 1)  None else Some(pageNumber)
     
     val uriStr = uri"https://www.trustpilot.com/_next/data/$suffix/categories/${categoryName}.json?page=${pageNumberParam}&categoryId=${categoryName}&sort=latest_review"
-   
-    println(uriStr);
 
     val response: Response[String] = quickRequest
       .get(uriStr)

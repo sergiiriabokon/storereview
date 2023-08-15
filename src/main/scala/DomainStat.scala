@@ -9,6 +9,9 @@ object DomainStat {
   val SESSION_ID = "vstat_session=ErJt7YU24evVK9RUNNqcn95FhC5yai0jHAHmnVwN;"
 
   def requestMontlyVisits(urlName:String): Int = {
+    if(!ConfigReader.getProperty("vstat.enable").getOrElse("0").equals("true")) {
+      return 0
+    }
     if (urlName.isEmpty()) 
       return 0
     
