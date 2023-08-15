@@ -11,9 +11,9 @@ object TrustPilotRequester {
    */
   val VALID_CATEGORY_IDS: Set[String] = Set("clothing_store", "outerwear_store", "jewelry_store", "electronics_technology")
   /**
-   * List of web-pages each corresponding to page_name.json API end-point
+   * List of web-pages each corresponding to page_name.json API end-point. Used if conf is not provided
    */
-  val CATEGORY_PAGES: Set[String] = Set("clothing_store", "jewelry_store", "electronics_technology")
+  val CATEGORY_PAGES = "clothing_store, jewelry_store"
 
   /**
    * holds list of retrieved values
@@ -21,7 +21,10 @@ object TrustPilotRequester {
   var stores = Map[String, Store]()
   
   def processReviews(): Unit = {
-    CATEGORY_PAGES.foreach{ categoryName => {
+
+    var storePages = ConfigReader.getProperty("store.categories").getOrElse(CATEGORY_PAGES).split(",").map(s=>s.trim())
+
+    storePages.foreach{ categoryName => {
       println(s"\nProcessing $categoryName")
       for i <- 1 until 3
         do synchronized {
