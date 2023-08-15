@@ -21,7 +21,8 @@ object TrustPilotParser {
         }
         val review = TrustPilotRequester.requestReview(unitId).getOrElse(List[String]("no reviews found"))
         val numberOfReviews = businessUnit.hcursor.downField("numberOfReviews").as[Int].toOption.getOrElse(0)
-        if (identifyingName.nonEmpty && categoryIds.nonEmpty) Some(Store(unitId, identifyingName, categoryIds, review, numberOfReviews))
+        val monthlyVisits = DomainStat.requestMontlyVisits(identifyingName)
+        if (identifyingName.nonEmpty && categoryIds.nonEmpty) Some(Store(unitId, identifyingName, categoryIds, review, numberOfReviews, monthlyVisits))
         else None
       }
 

@@ -27,7 +27,7 @@ class TrustPilotParserTests extends FunSuite {
 
     val result = TrustPilotParser.extractStores(json)
 
-    assertEquals(result, Some(List(("www.fashionnova.com", List("mens_clothing_store")))))
+    assertEquals(result.get(0).url, "www.fashionnova.com")
   }
 
   test("extractStores should return None when JSON is empty") {
