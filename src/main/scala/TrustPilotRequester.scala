@@ -33,12 +33,12 @@ object TrustPilotRequester {
         }
       }
     }
-    var storesList = stores.values.toList.sortBy( s => (s.numberOfReviews, s.monthlyVisits) ).reverse
+    var storesList = stores.values.toList.sortBy( s => (s.reviews.size, s.monthlyVisits) ).reverse
 
     println("\nResults: ")
     println(storesList.take(5)
     .map { store =>
-      s"${store.url} ${store.numberOfReviews} ${store.monthlyVisits} " + 
+      s"${store.url} ${store.reviews.size} ${store.monthlyVisits} " + 
       store.reviews.head.text.substring(0, Math.min(store.reviews.head.text.length(), 50))
       + " " + store.reviews.head.timestamp
     }.mkString(", "))
@@ -78,11 +78,23 @@ object TrustPilotRequester {
     }
   }
 
-  def requestReview(storeId: String): Option[List[Review]] = {
+  def requestReview(storeId: String, identifyingName: String): List[Review] = {
     val response: Response[String] = quickRequest
       .get(uri"https://www.trustpilot.com/api/categoriespages/$storeId/reviews?locale=en-US")
       .send()
   
-    TrustPilotParser.extractReviews(response.body)
+    val newReviews = TrustPilotParser.extractReviews(response.body).getOrElse(List[Review](Review("no reviews found", "no date")))
+    
+    // merging with previously found reviews
+    stores.get(identifyingName) match {
+      case Some(store) => {
+        
+        var allReviews:List[Review] = store.reviews ++ newReviews
+        allReviews.groupBy(_.timestamp).map(x => x._2.head).toList
+        
+      }
+      case None => newReviews
+    }
+    
   }
 }

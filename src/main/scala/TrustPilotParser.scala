@@ -19,7 +19,7 @@ object TrustPilotParser {
         val categoryIds = categories.flatMap { category =>
           category.hcursor.downField("categoryId").as[String].toOption
         }
-        val review = TrustPilotRequester.requestReview(unitId).getOrElse(List[Review](Review("no reviews found", "empty date")))
+        val review = TrustPilotRequester.requestReview(unitId, identifyingName)
         val numberOfReviews = businessUnit.hcursor.downField("numberOfReviews").as[Int].toOption.getOrElse(0)
         val monthlyVisits = DomainStat.requestMontlyVisits(identifyingName)
         
