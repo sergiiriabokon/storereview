@@ -37,7 +37,7 @@ object TrustPilotRequester {
       }
     }
 
-    val delay = Scheduler.START_TIME.plus(Duration.of(29, ChronoUnit.MINUTES));
+    val delay = Scheduler.START_TIME.plus(Duration.of(25, ChronoUnit.MINUTES));
 
     if (!LocalDateTime.now.isAfter(delay)) {
       println("\nwaiting to aggregate more results")

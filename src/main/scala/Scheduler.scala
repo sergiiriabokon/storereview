@@ -22,7 +22,7 @@ object Scheduler {
     val future: ScheduledFuture[_] = executor.scheduleAtFixedRate(() => fnToRun(), initialDelay, period, TimeUnit.MINUTES)
     
     // To stop the execution after a certain time (e.g., 1 hour)
-    executor.schedule(() => future.cancel(true), 60, TimeUnit.MINUTES)
+    executor.schedule(() => future.cancel(true), 77, TimeUnit.MINUTES)
 
     // regulates the main thread execution, program goes on as long as main thread does
     Thread.sleep(MAIN_THREAD_MAX_TIME_MIN * 60 * 1000) // script runs for N minutes with "sbt run"
