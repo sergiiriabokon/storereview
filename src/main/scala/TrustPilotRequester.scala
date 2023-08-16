@@ -1,6 +1,9 @@
 import sttp.client4.quick.*
 import sttp.client4.Response
 import sttp.model.Uri
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit;
+import java.time.Duration;
 
 /**
  * Reqeusts TrustPilot for domains with latest reviews
@@ -33,6 +36,14 @@ object TrustPilotRequester {
         }
       }
     }
+
+    val delay = Scheduler.START_TIME.plus(Duration.of(29, ChronoUnit.MINUTES));
+
+    if (!LocalDateTime.now.isAfter(delay)) {
+      println("\nwaiting to aggregate more results")
+      return
+    }
+
     var storesList = stores.values.toList.sortBy( s => (s.reviews.size, s.monthlyVisits) ).reverse
 
     println("\nResults: ")
@@ -89,7 +100,7 @@ object TrustPilotRequester {
     stores.get(identifyingName) match {
       case Some(store) => {
         
-        var allReviews:List[Review] = store.reviews ++ newReviews
+        var allReviews:List[Review] = newReviews ++ store.reviews
         allReviews.groupBy(_.timestamp).map(x => x._2.head).toList
         
       }
